@@ -33,37 +33,42 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Login Page',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          backgroundColor: Colors.blue,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Login Page',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        body: Center(
-          child: Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (!isLoggedin) ...[
-                  Text('this is login page'),
-                  SizedBox(height: 20),
-                  _usernameField(_usernameController),
-                  _passwordField(_passwordController),
-                  SizedBox(height: 20),
-                  ElevatedButton(onPressed: _login, child: Text('Login')),
-                ] else ...[
-                  Text('Halo, ${user1.nama}!'),
-                  SizedBox(height: 20),
-                  Text('Pasti username kamu: ${user1.username}'),
-                  Text('Pasti password kamu: ${user1.password}'),
-                ],
-              ], // ini tutup children
-            ),
+        backgroundColor: Colors.blue,
+      ),
+      body: Center(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (!isLoggedin) ...[
+                Text('this is login page'),
+                SizedBox(height: 20),
+                _usernameField(_usernameController),
+                _passwordField(_passwordController),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _login,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    minimumSize: Size(200, 45),
+                  ),
+                  child: Text('Login'),
+                ),
+              ] else ...[
+                Text('Halo, ${user1.nama}!'),
+                SizedBox(height: 20),
+                Text('Pasti username kamu: ${user1.username}'),
+                Text('Pasti password kamu: ${user1.password}'),
+              ],
+            ],
           ),
         ),
       ),
