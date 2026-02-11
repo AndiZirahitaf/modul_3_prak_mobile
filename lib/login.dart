@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Login failed. Incorrect username or password.'),
+            content: Text('Login Gagal: Username atau Password salah'),
           ),
         );
       }
@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                   _usernameField(_usernameController),
                   _passwordField(_passwordController),
                   SizedBox(height: 20),
-                  _loginButton(_login),
+                  ElevatedButton(onPressed: _login, child: Text('Login')),
                 ] else ...[
                   Text('Halo, ${user1.nama}!'),
                   SizedBox(height: 20),
@@ -106,8 +106,4 @@ Widget _passwordField(TextEditingController controller) {
       ),
     ),
   );
-}
-
-Widget _loginButton(void Function() _login) {
-  return ElevatedButton(onPressed: _login, child: Text('Login'));
 }
