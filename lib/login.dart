@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/data.dart';
+import 'models/data.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,23 +12,27 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool isLoggedin = false;
+  bool isLoginFailed = false;
 
   void _login() {
     String username = _usernameController.text;
     String password = _passwordController.text;
-    setState(() {
-      if (username == user1.username && password == user1.password) {
-        setState(() {
-          isLoggedin = true;
-        });
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Login Gagal: Username atau Password salah'),
-          ),
-        );
-      }
-    });
+    if (username == user1.username && password == user1.password) {
+      setState(() {
+        isLoggedin = true;
+        isLoginFailed = false;
+      });
+    } else {
+      setState(() {
+        isLoggedin = false;
+        isLoginFailed = true;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Login failed. Incorrect username or password.'),
+        ),
+      );
+    }
   }
 
   @override
@@ -50,8 +54,8 @@ class _LoginPageState extends State<LoginPage> {
               if (!isLoggedin) ...[
                 Text('this is login page'),
                 SizedBox(height: 20),
-                _usernameField(_usernameController),
-                _passwordField(_passwordController),
+                _usernameField(_usernameController, isLoginFailed),
+                _passwordField(_passwordController, isLoginFailed),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _login,
@@ -76,37 +80,48 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-Widget _usernameField(TextEditingController controller) {
+Widget _usernameField(TextEditingController controller, bool isLoginFailed) {
+  return _inputField(
+    controller: controller,
+    hint: 'Username',
+    isLoginFailed: isLoginFailed,
+  );
+}
+
+Widget _passwordField(TextEditingController controller, bool isLoginFailed) {
+  return _inputField(
+    controller: controller,
+    hint: 'Password',
+    isLoginFailed: isLoginFailed,
+    obscure: true,
+  );
+}
+
+Widget _inputField({
+  required TextEditingController controller,
+  required String hint,
+  required bool isLoginFailed,
+  bool obscure = false,
+}) {
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
     child: TextField(
       controller: controller,
+      obscureText: obscure,
       enabled: true,
-      decoration: const InputDecoration(
-        hintText: 'Username',
+      decoration: InputDecoration(
+        hintText: hint,
         contentPadding: EdgeInsets.all(8.0),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
           borderSide: BorderSide(color: Colors.blue),
         ),
-      ),
-    ),
-  );
-}
-
-Widget _passwordField(TextEditingController controller) {
-  return Container(
-    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-    child: TextFormField(
-      controller: controller,
-      obscureText: true,
-      enabled: true,
-      decoration: const InputDecoration(
-        hintText: 'Password',
-        contentPadding: EdgeInsets.all(8.0),
-        border: OutlineInputBorder(
+        enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
-          borderSide: BorderSide(color: Colors.blue),
+          borderSide: BorderSide(
+            color: isLoginFailed ? Colors.red : Colors.blue,
+            width: 2.0,
+          ),
         ),
       ),
     ),
